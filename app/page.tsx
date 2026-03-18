@@ -15,6 +15,7 @@ export default function HomePage() {
                 Torneo Interno de Futbol de TR
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
+                Consulta la tabla general del torneo con los datos actualizados y orden automático por puntos en forma ascendente.
                 Consulta la tabla general del torneo, con estadísticas completas, orden automático por puntos y rendimiento reciente por equipo.
               </p>
             </div>
