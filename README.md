@@ -68,6 +68,8 @@ Aplicación web construida con Next.js, React, TypeScript y Tailwind CSS para mo
 6. No necesitas variables de entorno para esta app.
 7. Haz clic en **Deploy**.
 
+> Si tu proyecto estaba configurado incorrectamente como estático y Vercel mostraba el error `no output directory named "public" found`, este repositorio ya incluye `vercel.json` para forzar `framework: nextjs` y `outputDirectory: .next`.
+
 ### Qué pasa después del deploy
 
 - Vercel generará una URL pública automáticamente.
