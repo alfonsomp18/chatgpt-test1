@@ -16,20 +16,21 @@ export default function HomePage() {
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-slate-300 sm:text-base">
                 Consulta la tabla general del torneo con los datos actualizados y orden automático por puntos en forma ascendente.
+                Consulta la tabla general del torneo, con estadísticas completas, orden automático por puntos y rendimiento reciente por equipo.
               </p>
             </div>
             <div className="grid grid-cols-3 gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-center text-sm backdrop-blur-sm">
               <div>
-                <p className="text-2xl font-bold text-white">5</p>
+                <p className="text-2xl font-bold text-white">8</p>
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-300">Equipos</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">5</p>
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-300">PJ máx.</p>
+                <p className="text-2xl font-bold text-white">10</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-300">Jornadas</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">PTS ↑</p>
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-300">Orden actual</p>
+                <p className="text-2xl font-bold text-white">Top 3</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-300">Destacado</p>
               </div>
             </div>
           </div>
@@ -40,14 +41,13 @@ export default function HomePage() {
             <div>
               <h2 className="text-xl font-bold text-slate-900">Tabla de posiciones</h2>
               <p className="text-sm text-slate-600">
-                Desliza horizontalmente en móvil para ver todas las columnas. La tabla está ordenada por PTS de menor a mayor.
+                Desliza horizontalmente en móvil para ver todas las columnas.
               </p>
             </div>
             <div className="flex flex-wrap gap-3 text-sm text-slate-600">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 shadow-sm">✅ Victoria</span>
               <span className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 shadow-sm">➖ Empate</span>
               <span className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 shadow-sm">❌ Derrota</span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 shadow-sm">⏸️ Sin jugar</span>
             </div>
           </div>
 
