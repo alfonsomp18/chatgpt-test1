@@ -4,15 +4,6 @@ const resultEmoji: Record<MatchResult, string> = {
   W: '✅',
   D: '➖',
   L: '❌',
-  N: '⏸️',
-};
-
-const resultLabel: Record<MatchResult, string> = {
-  W: 'Victoria',
-  D: 'Empate',
-  L: 'Derrota',
-  N: 'Sin jugar',
-};
 };
 
 const topThreeStyles = [
@@ -43,13 +34,11 @@ export function Table() {
           <tbody>
             {sortedTeams.map((team, index) => {
               const goalDifference = team.goalsFor - team.goalsAgainst;
-              const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-slate-50/70';
               const topThreeClass = index < 3 ? topThreeStyles[index] : index % 2 === 0 ? 'bg-white' : 'bg-slate-50/70';
 
               return (
                 <tr
                   key={team.name}
-                  className={`${rowClass} border-b border-slate-200/80 transition hover:bg-emerald-50`}
                   className={`${topThreeClass} border-b border-slate-200/80 transition hover:bg-emerald-50`}
                 >
                   <td className="px-4 py-4 align-middle font-semibold text-slate-900">
@@ -59,7 +48,6 @@ export function Table() {
                   </td>
                   <td className="px-4 py-4 align-middle">
                     <div className="flex items-center gap-3">
-                      <span className="text-base">⚽</span>
                       {index < 3 ? <span className="text-base">🏅</span> : <span className="text-base">⚽</span>}
                       <div>
                         <p className="font-semibold text-slate-900">{team.name}</p>
@@ -77,7 +65,6 @@ export function Table() {
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-1 text-lg" aria-label={`Últimos 5 partidos de ${team.name}`}>
                       {team.last5.map((result, resultIndex) => (
-                        <span key={`${team.name}-${result}-${resultIndex}`} title={resultLabel[result]}>
                         <span key={`${team.name}-${result}-${resultIndex}`} title={result}>
                           {resultEmoji[result]}
                         </span>
