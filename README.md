@@ -33,13 +33,46 @@ Aplicación web construida con Next.js, React, TypeScript y Tailwind CSS para mo
 
 3. Abre `http://localhost:3000` en tu navegador.
 
-## Cómo desplegar en Vercel
+## Cómo desplegar en GitHub + Vercel
 
-1. Sube este repositorio a GitHub, GitLab o Bitbucket.
-2. Entra en [Vercel](https://vercel.com/).
-3. Crea un nuevo proyecto e importa el repositorio.
-4. Vercel detectará automáticamente que es una app Next.js.
-5. Haz clic en **Deploy**.
+### Opción 1: subir primero a GitHub
+
+1. Crea un nuevo repositorio en GitHub.
+2. Desde tu máquina local, inicializa el repositorio si hace falta:
+
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   ```
+
+3. Conecta el repositorio remoto y sube el código:
+
+   ```bash
+   git remote add origin https://github.com/TU-USUARIO/TU-REPO.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+### Opción 2: desplegar desde la app de Vercel
+
+1. Entra en [Vercel](https://vercel.com/) y crea una cuenta o inicia sesión.
+2. Haz clic en **Add New...** → **Project**.
+3. Importa el repositorio de GitHub donde subiste este proyecto.
+4. Vercel detectará automáticamente que es una aplicación Next.js.
+5. Verifica estas opciones:
+   - **Framework Preset**: `Next.js`
+   - **Root Directory**: `/`
+   - **Build Command**: `next build` (o dejar el valor por defecto)
+   - **Output Directory**: `.next` (o dejar el valor por defecto)
+6. No necesitas variables de entorno para esta app.
+7. Haz clic en **Deploy**.
+
+### Qué pasa después del deploy
+
+- Vercel generará una URL pública automáticamente.
+- Cada nuevo `git push` a la rama principal podrá disparar un nuevo deploy.
+- Si editas `data/teams.ts`, haz commit y push para publicar los cambios actualizados.
 
 ## Dónde editar los datos de los equipos
 
