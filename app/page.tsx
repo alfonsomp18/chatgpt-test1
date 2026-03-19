@@ -21,11 +21,11 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-3 gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-center text-sm backdrop-blur-sm">
               <div>
-                <p className="text-2xl font-bold text-white">8</p>
+                <p className="text-2xl font-bold text-white">5</p>
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-300">Equipos</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">10</p>
+                <p className="text-2xl font-bold text-white">2</p>
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-300">Jornadas</p>
               </div>
               <div>
