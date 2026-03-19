@@ -1,3 +1,4 @@
+export type MatchResult = 'W' | 'D' | 'L' | 'N';
 export type MatchResult = 'W' | 'D' | 'L';
 
 export type Team = {
@@ -71,17 +72,20 @@ export const teams: Team[] = [
 ];
 
 export const sortedTeams = [...teams].sort((a, b) => {
+  const pointsDifference = a.points - b.points;
   const pointsDifference = b.points - a.points;
 
   if (pointsDifference !== 0) {
     return pointsDifference;
   }
 
+  const goalDifference = a.goalsFor - a.goalsAgainst - (b.goalsFor - b.goalsAgainst);
   const goalDifference = b.goalsFor - b.goalsAgainst - (a.goalsFor - a.goalsAgainst);
 
   if (goalDifference !== 0) {
     return goalDifference;
   }
 
+  return a.goalsFor - b.goalsFor;
   return b.goalsFor - a.goalsFor;
 });
