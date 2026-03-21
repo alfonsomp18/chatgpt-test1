@@ -7,7 +7,15 @@ const config: Config = {
     './data/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        pitch: '#0f766e',
+        trophy: '#f59e0b',
+      },
+      boxShadow: {
+        card: '0 20px 45px -25px rgba(15, 23, 42, 0.35)',
+      },
+    },
   },
   plugins: [],
 };
