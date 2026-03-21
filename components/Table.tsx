@@ -1,17 +1,17 @@
-import { sortedTeams, type MatchResult } from '@/data/teams';
+import type { StandingRow, MatchResultCode } from '@/lib/standings';
 
-const resultEmoji: Record<MatchResult, string> = {
+const resultEmoji: Record<MatchResultCode, string> = {
   W: '✅',
   D: '➖',
   L: '❌',
 };
 
-function getGoalDifference(goalsFor: number, goalsAgainst: number) {
+function formatGoalDifference(goalsFor: number, goalsAgainst: number) {
   const difference = goalsFor - goalsAgainst;
   return difference >= 0 ? `+${difference}` : `${difference}`;
 }
 
-export function Table() {
+export function Table({ standings }: { standings: StandingRow[] }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
       <div className="overflow-x-auto">
@@ -31,14 +31,14 @@ export function Table() {
             </tr>
           </thead>
           <tbody>
-            {sortedTeams.map((team, index) => (
-              <tr key={team.name} className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50">
+            {standings.map((team, index) => (
+              <tr key={team.id} className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50">
                 <td className="px-4 py-3 font-medium text-gray-900">{index + 1}</td>
                 <td className="px-4 py-3">
                   <div className="flex flex-col">
                     <span className="font-medium text-gray-900">{team.name}</span>
                     <span className="text-xs text-gray-500">
-                      DG: {getGoalDifference(team.goalsFor, team.goalsAgainst)}
+                      DG: {formatGoalDifference(team.goalsFor, team.goalsAgainst)}
                     </span>
                   </div>
                 </td>
@@ -52,7 +52,7 @@ export function Table() {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1.5" aria-label={`Últimos 5 partidos de ${team.name}`}>
                     {team.last5.map((result, resultIndex) => (
-                      <span key={`${team.name}-${result}-${resultIndex}`} title={result}>
+                      <span key={`${team.id}-${result}-${resultIndex}`} title={result}>
                         {resultEmoji[result]}
                       </span>
                     ))}
