@@ -1,7 +1,6 @@
-export type MatchResult = 'W' | 'D' | 'L' | 'N';
 export type MatchResult = 'W' | 'D' | 'L';
 
-export type Team = {
+export interface Team {
   name: string;
   played: number;
   wins: number;
@@ -11,81 +10,67 @@ export type Team = {
   goalsAgainst: number;
   points: number;
   last5: MatchResult[];
-};
+}
 
 export const teams: Team[] = [
   {
-    name: '[Azul] TR Corporates/HR',
+    name: 'Equipo Azul',
     played: 5,
     wins: 4,
-    draws: 0,
-    losses: 1,
-    goalsFor: 27,
-    goalsAgainst: 18,
-    points: 12,
-    last5: ['W', 'W', 'L', 'W', 'W'],
-  },
-  {
-    name: '[Negro] Legal',
-    played: 4,
-    wins: 2,
-    draws: 2,
+    draws: 1,
     losses: 0,
-    goalsFor: 14,
-    goalsAgainst: 21,
-    points: 6,
-    last5: ['W', 'D', 'W', 'D'],
+    goalsFor: 12,
+    goalsAgainst: 4,
+    points: 13,
+    last5: ['W', 'W', 'D', 'W', 'W'],
   },
   {
-    name: '[Rojo] TAAP',
-    played: 4,
-    wins: 0,
-    draws: 0,
-    losses: 4,
-    goalsFor: 10,
-    goalsAgainst: 19,
-    points: 0,
-    last5: ['L', 'L', 'L', 'L'],
-  },
-  {
-    name: '[Amarillo] TR Operations / Product',
-    played: 4,
+    name: 'Equipo Blanco',
+    played: 5,
     wins: 3,
-    draws: 0,
+    draws: 1,
     losses: 1,
-    goalsFor: 19,
-    goalsAgainst: 20,
-    points: 9,
-    last5: ['W', 'L', 'W', 'W'],
+    goalsFor: 10,
+    goalsAgainst: 6,
+    points: 10,
+    last5: ['W', 'L', 'W', 'D', 'W'],
   },
   {
-    name: '[Blanco] TR Technology',
-    played: 4,
+    name: 'Equipo Negro',
+    played: 5,
     wins: 2,
-    draws: 0,
+    draws: 1,
     losses: 2,
-    goalsFor: 20,
-    goalsAgainst: 10,
-    points: 6,
-    last5: ['L', 'W', 'L', 'W'],
+    goalsFor: 8,
+    goalsAgainst: 8,
+    points: 7,
+    last5: ['L', 'W', 'D', 'L', 'W'],
+  },
+  {
+    name: 'Equipo Verde',
+    played: 5,
+    wins: 0,
+    draws: 1,
+    losses: 4,
+    goalsFor: 3,
+    goalsAgainst: 15,
+    points: 1,
+    last5: ['L', 'L', 'D', 'L', 'L'],
   },
 ];
 
 export const sortedTeams = [...teams].sort((a, b) => {
-  const pointsDifference = a.points - b.points;
   const pointsDifference = b.points - a.points;
 
   if (pointsDifference !== 0) {
     return pointsDifference;
   }
 
-  const goalDifference = a.goalsFor - a.goalsAgainst - (b.goalsFor - b.goalsAgainst);
   const goalDifference = b.goalsFor - b.goalsAgainst - (a.goalsFor - a.goalsAgainst);
 
   if (goalDifference !== 0) {
     return goalDifference;
   }
 
-  return a.goalsFor - b.goalsFor;
   return b.goalsFor - a.goalsFor;
 });
