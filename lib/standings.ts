@@ -6,6 +6,7 @@ export type MatchResultCode = 'W' | 'D' | 'L';
 export interface StandingRow {
   id: string;
   name: string;
+  color: string;
   played: number;
   wins: number;
   draws: number;
@@ -60,7 +61,7 @@ export function computeStandings(teamList: TeamRecord[] = teams, matchList: Matc
     let goalsFor = 0;
     let goalsAgainst = 0;
 
-    const last5 = teamMatches
+    const last5 = [...teamMatches]
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       .slice(0, 5)
       .map((match) => getTeamResult(match, team.id))
@@ -86,6 +87,7 @@ export function computeStandings(teamList: TeamRecord[] = teams, matchList: Matc
     return {
       id: team.id,
       name: team.name,
+      color: team.color,
       played: teamMatches.length,
       wins,
       draws,

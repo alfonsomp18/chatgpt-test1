@@ -1,4 +1,5 @@
 import type { StandingRow, MatchResultCode } from '@/lib/standings';
+import { getTeamColorEmoji } from '@/lib/helpers';
 
 const resultEmoji: Record<MatchResultCode, string> = {
   W: '✅',
@@ -36,7 +37,9 @@ export function Table({ standings }: { standings: StandingRow[] }) {
                 <td className="px-4 py-3 font-medium text-gray-900">{index + 1}</td>
                 <td className="px-4 py-3">
                   <div className="flex flex-col">
-                    <span className="font-medium text-gray-900">{team.name}</span>
+                    <span className="font-medium text-gray-900">
+                      {getTeamColorEmoji(team.color)} {team.name}
+                    </span>
                     <span className="text-xs text-gray-500">
                       DG: {formatGoalDifference(team.goalsFor, team.goalsAgainst)}
                     </span>

@@ -1,4 +1,5 @@
 import { getScorers } from '@/lib/stats';
+import { getTeamColorEmoji } from '@/lib/helpers';
 
 export default function ScorersPage() {
   const scorers = getScorers().filter((player) => player.goals > 0);
@@ -27,7 +28,9 @@ export default function ScorersPage() {
               {scorers.map((player) => (
                 <tr key={player.playerId} className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50">
                   <td className="px-4 py-3 font-medium text-gray-900">{player.playerName}</td>
-                  <td className="px-4 py-3">{player.teamName}</td>
+                  <td className="px-4 py-3">
+                    {getTeamColorEmoji(player.teamColor)} {player.teamName}
+                  </td>
                   <td className="px-4 py-3 text-center font-semibold text-gray-900">{player.goals}</td>
                 </tr>
               ))}

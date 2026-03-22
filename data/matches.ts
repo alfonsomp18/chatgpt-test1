@@ -8,6 +8,7 @@ export interface MatchEvent {
 
 export interface MatchRecord {
   id: string;
+  jornada: number;
   homeTeamId: string;
   awayTeamId: string;
   date: string;
@@ -22,6 +23,7 @@ export interface MatchRecord {
 export const matches: MatchRecord[] = [
   {
     id: 'match-1',
+    jornada: 1,
     homeTeamId: 'team-azul',
     awayTeamId: 'team-blanco',
     date: '2026-03-01T19:00:00.000Z',
@@ -36,6 +38,7 @@ export const matches: MatchRecord[] = [
   },
   {
     id: 'match-2',
+    jornada: 1,
     homeTeamId: 'team-negro',
     awayTeamId: 'team-verde',
     date: '2026-03-02T19:00:00.000Z',
@@ -50,6 +53,7 @@ export const matches: MatchRecord[] = [
   },
   {
     id: 'match-3',
+    jornada: 2,
     homeTeamId: 'team-azul',
     awayTeamId: 'team-negro',
     date: '2026-03-08T19:00:00.000Z',
@@ -62,6 +66,7 @@ export const matches: MatchRecord[] = [
   },
   {
     id: 'match-4',
+    jornada: 2,
     homeTeamId: 'team-blanco',
     awayTeamId: 'team-verde',
     date: '2026-03-09T19:00:00.000Z',
@@ -77,6 +82,7 @@ export const matches: MatchRecord[] = [
   },
   {
     id: 'match-5',
+    jornada: 3,
     homeTeamId: 'team-azul',
     awayTeamId: 'team-verde',
     date: '2026-03-15T19:00:00.000Z',
@@ -89,6 +95,7 @@ export const matches: MatchRecord[] = [
   },
   {
     id: 'match-6',
+    jornada: 3,
     homeTeamId: 'team-blanco',
     awayTeamId: 'team-negro',
     date: '2026-03-16T19:00:00.000Z',
@@ -104,6 +111,7 @@ export const matches: MatchRecord[] = [
   },
   {
     id: 'match-7',
+    jornada: 4,
     homeTeamId: 'team-negro',
     awayTeamId: 'team-azul',
     date: '2026-03-23T19:00:00.000Z',
@@ -113,6 +121,7 @@ export const matches: MatchRecord[] = [
   },
   {
     id: 'match-8',
+    jornada: 4,
     homeTeamId: 'team-verde',
     awayTeamId: 'team-blanco',
     date: '2026-03-24T19:00:00.000Z',

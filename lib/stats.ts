@@ -6,10 +6,17 @@ import { computeStandings } from '@/lib/standings';
 export interface MatchWithDetails extends MatchRecord {
   homeTeamName: string;
   awayTeamName: string;
+  homeTeamColor: string;
+  awayTeamColor: string;
   scorers: {
     home: string[];
     away: string[];
   };
+}
+
+export interface MatchesByJornada {
+  jornada: number;
+  matches: MatchWithDetails[];
 }
 
 export interface ScorerRow {
@@ -17,15 +24,18 @@ export interface ScorerRow {
   playerName: string;
   teamId: string;
   teamName: string;
+  teamColor: string;
   goals: number;
 }
 
 export interface TeamWithPlayers {
   id: string;
   name: string;
+  color: string;
   players: Array<{
     id: string;
     name: string;
+    area: string;
     goals: number;
   }>;
 }
@@ -42,34 +52,59 @@ function getScorerNames(match: MatchRecord, teamId: string) {
     });
 }
 
+function addMatchDetails(match: MatchRecord): MatchWithDetails {
+  return {
+    ...match,
+    homeTeamName: teamMap.get(match.homeTeamId)?.name ?? match.homeTeamId,
+    awayTeamName: teamMap.get(match.awayTeamId)?.name ?? match.awayTeamId,
+    homeTeamColor: teamMap.get(match.homeTeamId)?.color ?? 'white',
+    awayTeamColor: teamMap.get(match.awayTeamId)?.color ?? 'white',
+    scorers: {
+      home: getScorerNames(match, match.homeTeamId),
+      away: getScorerNames(match, match.awayTeamId),
+    },
+  };
+}
+
+function groupMatchesByJornada(matches: MatchWithDetails[]) {
+  const grouped = new Map<number, MatchWithDetails[]>();
+
+  matches.forEach((match) => {
+    grouped.set(match.jornada, [...(grouped.get(match.jornada) ?? []), match]);
+  });
+
+  return [...grouped.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map<MatchesByJornada>(([jornada, jornadaMatches]) => ({ jornada, matches: jornadaMatches }));
+}
+
 export function getCompletedMatches(matchList: MatchRecord[] = baseMatches): MatchWithDetails[] {
   return matchList
     .filter((match) => match.status === 'completed')
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .map((match) => ({
-      ...match,
-      homeTeamName: teamMap.get(match.homeTeamId)?.name ?? match.homeTeamId,
-      awayTeamName: teamMap.get(match.awayTeamId)?.name ?? match.awayTeamId,
-      scorers: {
-        home: getScorerNames(match, match.homeTeamId),
-        away: getScorerNames(match, match.awayTeamId),
-      },
-    }));
+    .map(addMatchDetails);
+}
+
+export function getCompletedMatchesByJornada(matchList: MatchRecord[] = baseMatches) {
+  return groupMatchesByJornada(
+    getCompletedMatches(matchList).sort((a, b) => {
+      if (a.jornada !== b.jornada) {
+        return a.jornada - b.jornada;
+      }
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    }),
+  );
 }
 
 export function getUpcomingMatches(matchList: MatchRecord[] = baseMatches): MatchWithDetails[] {
   return matchList
     .filter((match) => match.status === 'scheduled')
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    .map((match) => ({
-      ...match,
-      homeTeamName: teamMap.get(match.homeTeamId)?.name ?? match.homeTeamId,
-      awayTeamName: teamMap.get(match.awayTeamId)?.name ?? match.awayTeamId,
-      scorers: {
-        home: [],
-        away: [],
-      },
-    }));
+    .map(addMatchDetails);
+}
+
+export function getUpcomingMatchesByJornada(matchList: MatchRecord[] = baseMatches) {
+  return groupMatchesByJornada(getUpcomingMatches(matchList));
 }
 
 export function getScorers(matchList: MatchRecord[] = baseMatches): ScorerRow[] {
@@ -89,6 +124,7 @@ export function getScorers(matchList: MatchRecord[] = baseMatches): ScorerRow[] 
       playerName: player.name,
       teamId: player.teamId,
       teamName: teamMap.get(player.teamId)?.name ?? player.teamId,
+      teamColor: teamMap.get(player.teamId)?.color ?? 'white',
       goals: goalTotals.get(player.id) ?? 0,
     }))
     .sort((a, b) => {
@@ -107,11 +143,13 @@ export function getTeamsWithPlayers(matchList: MatchRecord[] = baseMatches): Tea
   return teams.map((team) => ({
     id: team.id,
     name: team.name,
+    color: team.color,
     players: players
       .filter((player) => player.teamId === team.id)
       .map((player) => ({
         id: player.id,
         name: player.name,
+        area: player.area,
         goals: goalsByPlayer.get(player.id) ?? 0,
       }))
       .sort((a, b) => a.name.localeCompare(b.name)),
