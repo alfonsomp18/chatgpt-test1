@@ -1,7 +1,25 @@
-import { matches as baseMatches, type MatchEvent, type MatchRecord } from '@/data/matches';
-import { players } from '@/data/players';
-import { teams } from '@/data/teams';
+import type { JornadaRecord } from '@/data/jornadas';
+import type { MatchEvent, MatchRecord } from '@/data/matches';
+import { matches as defaultMatches } from '@/data/matches';
+import type { PlayerRecord } from '@/data/players';
+import { players as defaultPlayers } from '@/data/players';
+import type { TeamRecord } from '@/data/teams';
+import { teams as defaultTeams } from '@/data/teams';
 import { computeStandings } from '@/lib/standings';
+
+export interface TournamentDataShape {
+  teams: TeamRecord[];
+  players: PlayerRecord[];
+  matches: MatchRecord[];
+  jornadas: JornadaRecord[];
+}
+
+const defaultData: TournamentDataShape = {
+  teams: defaultTeams,
+  players: defaultPlayers,
+  matches: defaultMatches,
+  jornadas: [],
+};
 
 export interface MatchWithDetails extends MatchRecord {
   homeTeamName: string;
@@ -16,6 +34,7 @@ export interface MatchWithDetails extends MatchRecord {
 
 export interface MatchesByJornada {
   jornada: number;
+  jornadaDate?: string;
   matches: MatchWithDetails[];
 }
 
@@ -40,33 +59,30 @@ export interface TeamWithPlayers {
   }>;
 }
 
-const teamMap = new Map(teams.map((team) => [team.id, team]));
-const playerMap = new Map(players.map((player) => [player.id, player]));
-
-function getScorerNames(match: MatchRecord, teamId: string) {
+function getScorerNames(match: MatchRecord, teamId: string, playersMap: Map<string, PlayerRecord>) {
   return match.events
     .filter((event) => event.teamId === teamId)
     .map((event) => {
-      const player = playerMap.get(event.playerId);
+      const player = playersMap.get(event.playerId);
       return player ? `${player.name}${event.minute ? ` (${event.minute}')` : ''}` : 'Jugador desconocido';
     });
 }
 
-function addMatchDetails(match: MatchRecord): MatchWithDetails {
+function addMatchDetails(match: MatchRecord, teamsMap: Map<string, TeamRecord>, playersMap: Map<string, PlayerRecord>): MatchWithDetails {
   return {
     ...match,
-    homeTeamName: teamMap.get(match.homeTeamId)?.name ?? match.homeTeamId,
-    awayTeamName: teamMap.get(match.awayTeamId)?.name ?? match.awayTeamId,
-    homeTeamColor: teamMap.get(match.homeTeamId)?.color ?? 'white',
-    awayTeamColor: teamMap.get(match.awayTeamId)?.color ?? 'white',
+    homeTeamName: teamsMap.get(match.homeTeamId)?.name ?? match.homeTeamId,
+    awayTeamName: teamsMap.get(match.awayTeamId)?.name ?? match.awayTeamId,
+    homeTeamColor: teamsMap.get(match.homeTeamId)?.color ?? 'white',
+    awayTeamColor: teamsMap.get(match.awayTeamId)?.color ?? 'white',
     scorers: {
-      home: getScorerNames(match, match.homeTeamId),
-      away: getScorerNames(match, match.awayTeamId),
+      home: getScorerNames(match, match.homeTeamId, playersMap),
+      away: getScorerNames(match, match.awayTeamId, playersMap),
     },
   };
 }
 
-function groupMatchesByJornada(matches: MatchWithDetails[]) {
+function groupMatchesByJornada(matches: MatchWithDetails[], jornadasMap: Map<number, JornadaRecord>) {
   const grouped = new Map<number, MatchWithDetails[]>();
 
   matches.forEach((match) => {
@@ -75,42 +91,63 @@ function groupMatchesByJornada(matches: MatchWithDetails[]) {
 
   return [...grouped.entries()]
     .sort((a, b) => a[0] - b[0])
-    .map<MatchesByJornada>(([jornada, jornadaMatches]) => ({ jornada, matches: jornadaMatches }));
+    .map<MatchesByJornada>(([jornada, jornadaMatches]) => ({
+      jornada,
+      jornadaDate: jornadasMap.get(jornada)?.date,
+      matches: jornadaMatches,
+    }));
 }
 
-export function getCompletedMatches(matchList: MatchRecord[] = baseMatches): MatchWithDetails[] {
-  return matchList
+function getMaps(data: TournamentDataShape) {
+  return {
+    teamsMap: new Map(data.teams.map((team) => [team.id, team])),
+    playersMap: new Map(data.players.map((player) => [player.id, player])),
+    jornadasMap: new Map(data.jornadas.map((jornada) => [jornada.number, jornada])),
+  };
+}
+
+export function getCompletedMatches(data: TournamentDataShape = defaultData): MatchWithDetails[] {
+  const { teamsMap, playersMap } = getMaps(data);
+
+  return data.matches
     .filter((match) => match.status === 'completed')
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .map(addMatchDetails);
+    .map((match) => addMatchDetails(match, teamsMap, playersMap));
 }
 
-export function getCompletedMatchesByJornada(matchList: MatchRecord[] = baseMatches) {
+export function getCompletedMatchesByJornada(data: TournamentDataShape = defaultData) {
+  const { jornadasMap } = getMaps(data);
+
   return groupMatchesByJornada(
-    getCompletedMatches(matchList).sort((a, b) => {
+    getCompletedMatches(data).sort((a, b) => {
       if (a.jornada !== b.jornada) {
         return a.jornada - b.jornada;
       }
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     }),
+    jornadasMap,
   );
 }
 
-export function getUpcomingMatches(matchList: MatchRecord[] = baseMatches): MatchWithDetails[] {
-  return matchList
+export function getUpcomingMatches(data: TournamentDataShape = defaultData): MatchWithDetails[] {
+  const { teamsMap, playersMap } = getMaps(data);
+
+  return data.matches
     .filter((match) => match.status === 'scheduled')
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    .map(addMatchDetails);
+    .map((match) => addMatchDetails(match, teamsMap, playersMap));
 }
 
-export function getUpcomingMatchesByJornada(matchList: MatchRecord[] = baseMatches) {
-  return groupMatchesByJornada(getUpcomingMatches(matchList));
+export function getUpcomingMatchesByJornada(data: TournamentDataShape = defaultData) {
+  const { jornadasMap } = getMaps(data);
+  return groupMatchesByJornada(getUpcomingMatches(data), jornadasMap);
 }
 
-export function getScorers(matchList: MatchRecord[] = baseMatches): ScorerRow[] {
+export function getScorers(data: TournamentDataShape = defaultData): ScorerRow[] {
   const goalTotals = new Map<string, number>();
+  const { teamsMap } = getMaps(data);
 
-  matchList
+  data.matches
     .filter((match) => match.status === 'completed')
     .forEach((match) => {
       match.events.forEach((event) => {
@@ -118,13 +155,13 @@ export function getScorers(matchList: MatchRecord[] = baseMatches): ScorerRow[] 
       });
     });
 
-  return players
+  return data.players
     .map((player) => ({
       playerId: player.id,
       playerName: player.name,
       teamId: player.teamId,
-      teamName: teamMap.get(player.teamId)?.name ?? player.teamId,
-      teamColor: teamMap.get(player.teamId)?.color ?? 'white',
+      teamName: teamsMap.get(player.teamId)?.name ?? player.teamId,
+      teamColor: teamsMap.get(player.teamId)?.color ?? 'white',
       goals: goalTotals.get(player.id) ?? 0,
     }))
     .sort((a, b) => {
@@ -136,15 +173,15 @@ export function getScorers(matchList: MatchRecord[] = baseMatches): ScorerRow[] 
     });
 }
 
-export function getTeamsWithPlayers(matchList: MatchRecord[] = baseMatches): TeamWithPlayers[] {
-  const scorers = getScorers(matchList);
+export function getTeamsWithPlayers(data: TournamentDataShape = defaultData): TeamWithPlayers[] {
+  const scorers = getScorers(data);
   const goalsByPlayer = new Map(scorers.map((row) => [row.playerId, row.goals]));
 
-  return teams.map((team) => ({
+  return data.teams.map((team) => ({
     id: team.id,
     name: team.name,
     color: team.color,
-    players: players
+    players: data.players
       .filter((player) => player.teamId === team.id)
       .map((player) => ({
         id: player.id,
@@ -165,12 +202,8 @@ interface UpdateMatchInput {
   status?: MatchRecord['status'];
 }
 
-export function updateMatchResult(
-  matchId: string,
-  data: UpdateMatchInput,
-  matchList: MatchRecord[] = baseMatches,
-) {
-  const updatedMatches = matchList.map((match) =>
+export function updateMatchResult(matchId: string, data: UpdateMatchInput, sourceData: TournamentDataShape = defaultData) {
+  const updatedMatches = sourceData.matches.map((match) =>
     match.id === matchId
       ? {
           ...match,
@@ -181,10 +214,15 @@ export function updateMatchResult(
       : match,
   );
 
-  return {
+  const nextData = {
+    ...sourceData,
     matches: updatedMatches,
-    standings: computeStandings(teams, updatedMatches),
-    scorers: getScorers(updatedMatches),
-    teamMembers: getTeamsWithPlayers(updatedMatches),
+  };
+
+  return {
+    data: nextData,
+    standings: computeStandings(nextData.teams, nextData.matches),
+    scorers: getScorers(nextData),
+    teamMembers: getTeamsWithPlayers(nextData),
   };
 }

@@ -1,8 +1,12 @@
+'use client';
+
 import { Table } from '@/components/Table';
 import { computeStandings } from '@/lib/standings';
+import { useTournamentStore } from '@/lib/store';
 
 export default function StandingsPage() {
-  const standings = computeStandings();
+  const { data } = useTournamentStore();
+  const standings = computeStandings(data.teams, data.matches);
 
   return (
     <section className="space-y-6">

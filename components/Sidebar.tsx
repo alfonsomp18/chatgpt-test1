@@ -10,6 +10,7 @@ const navigationItems = [
   { href: '/matches/upcoming', label: 'Partidos Próximos' },
   { href: '/scorers', label: 'Tabla de Goleo' },
   { href: '/teams', label: 'Miembros por equipo' },
+  { href: '/admin', label: 'Admin' },
 ];
 
 export function Sidebar() {

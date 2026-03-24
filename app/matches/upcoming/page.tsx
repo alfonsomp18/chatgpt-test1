@@ -1,9 +1,13 @@
+'use client';
+
 import { MatchCard } from '@/components/MatchCard';
-import { formatReadableDate, jornadaDates } from '@/lib/helpers';
+import { formatReadableDate } from '@/lib/helpers';
 import { getUpcomingMatchesByJornada } from '@/lib/stats';
+import { useTournamentStore } from '@/lib/store';
 
 export default function UpcomingMatchesPage() {
-  const jornadas = getUpcomingMatchesByJornada();
+  const { data } = useTournamentStore();
+  const jornadas = getUpcomingMatchesByJornada(data);
 
   return (
     <section className="space-y-6">
@@ -20,7 +24,7 @@ export default function UpcomingMatchesPage() {
           <section key={group.jornada} className="space-y-3">
             <div className="space-y-1">
               <h2 className="text-lg font-semibold text-gray-900">Jornada {group.jornada}</h2>
-              <p className="text-sm text-gray-500">{formatReadableDate(jornadaDates[group.jornada])}</p>
+              {group.jornadaDate ? <p className="text-sm text-gray-500">{formatReadableDate(group.jornadaDate)}</p> : null}
             </div>
             <div className="space-y-4">
               {group.matches.map((match) => (

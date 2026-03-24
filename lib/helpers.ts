@@ -1,9 +1,3 @@
-export const jornadaDates: Record<number, string> = {
-  1: '2023-01-29',
-  2: '2026-03-05',
-  3: '2026-04-23',
-};
-
 export function getTeamColorEmoji(color: string): string {
   const normalizedColor = color.trim().toLowerCase();
 

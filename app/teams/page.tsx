@@ -1,8 +1,12 @@
-import { getTeamsWithPlayers } from '@/lib/stats';
+'use client';
+
 import { getTeamColorEmoji } from '@/lib/helpers';
+import { getTeamsWithPlayers } from '@/lib/stats';
+import { useTournamentStore } from '@/lib/store';
 
 export default function TeamsPage() {
-  const groupedTeams = getTeamsWithPlayers();
+  const { data } = useTournamentStore();
+  const groupedTeams = getTeamsWithPlayers(data);
 
   return (
     <section className="space-y-6">

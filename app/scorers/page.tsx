@@ -1,8 +1,12 @@
-import { getScorers } from '@/lib/stats';
+'use client';
+
 import { getTeamColorEmoji } from '@/lib/helpers';
+import { getScorers } from '@/lib/stats';
+import { useTournamentStore } from '@/lib/store';
 
 export default function ScorersPage() {
-  const scorers = getScorers().filter((player) => player.goals > 0);
+  const { data } = useTournamentStore();
+  const scorers = getScorers(data).filter((player) => player.goals > 0);
 
   return (
     <section className="space-y-6">
