@@ -1,0 +1,67 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+
+const navigationItems = [
+  { href: '/standings', label: 'Tabla Principal' },
+  { href: '/matches/past', label: 'Partidos Pasados' },
+  { href: '/matches/upcoming', label: 'Partidos Próximos' },
+  { href: '/scorers', label: 'Tabla de Goleo' },
+  { href: '/teams', label: 'Miembros por equipo' },
+  { href: '/admin', label: 'Admin' },
+];
+
+export function Sidebar() {
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <div className="sticky top-0 z-30 border-b border-gray-200 bg-white px-4 py-3 lg:hidden">
+        <button
+          type="button"
+          onClick={() => setIsOpen((open) => !open)}
+          className="rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-700"
+        >
+          {isOpen ? 'Cerrar menú' : 'Abrir menú'}
+        </button>
+      </div>
+
+      <aside
+        className={[
+          'border-r border-gray-200 bg-white lg:sticky lg:top-0 lg:block lg:h-screen',
+          isOpen ? 'block' : 'hidden lg:block',
+        ].join(' ')}
+      >
+        <div className="flex h-full flex-col gap-6 px-4 py-6">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-gray-500">⚽ Torneo Interno</p>
+            <h1 className="text-lg font-semibold text-gray-900">Torneo Interno de Futbol de TR</h1>
+          </div>
+
+          <nav className="flex flex-col gap-1">
+            {navigationItems.map((item) => {
+              const isActive = pathname === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={[
+                    'rounded-lg px-3 py-2 text-sm transition-colors',
+                    isActive ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100',
+                  ].join(' ')}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      </aside>
+    </>
+  );
+}
