@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { Analytics } from '@vercel/analytics/next';
 import { Sidebar } from '@/components/Sidebar';
 import '@/styles/globals.css';
 
@@ -20,6 +21,7 @@ export default function RootLayout({
           <Sidebar />
           <main className="px-4 py-6 sm:px-6 lg:px-10">{children}</main>
         </div>
+        <Analytics />
       </body>
     </html>
   );
