@@ -8,7 +8,7 @@ export interface TeamRecord {
 export const teams: TeamRecord[] = [
   {
     id: 'team-corporates-hr',
-    name: 'Corporates-HR',
+    name: 'Corporates/HR',
     color: 'azul',
     players: ['player-1', 'player-2', 'player-3', 'player-4'],
   },
@@ -20,20 +20,32 @@ export const teams: TeamRecord[] = [
   },
   {
     id: 'team-taap',
-    name: 'TAAP',
+    name: 'TAAP/Comercial',
     color: 'verde',
     players: ['player-9', 'player-10', 'player-11', 'player-12'],
   },
   {
     id: 'team-operations-product',
-    name: 'Operations-Product',
+    name: 'Operations/Product',
     color: 'amarillo',
-    players: ['player-13', 'player-14', 'player-15', 'player-16'],
+    players: [
+      'player-13',
+      'player-14',
+      'player-15',
+      'player-16',
+      'player-17',
+      'player-18',
+      'player-19',
+      'player-20',
+      'player-21',
+      'player-22',
+      'player-23',
+    ],
   },
   {
     id: 'team-technology',
     name: 'Technology',
     color: 'blanco',
-    players: ['player-17', 'player-18', 'player-19', 'player-20'],
+    players: ['player-24', 'player-25', 'player-26', 'player-27'],
   },
 ];
