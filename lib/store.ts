@@ -22,6 +22,18 @@ function generateId(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+
+function normalizeTournamentData(parsed: TournamentData): TournamentData {
+  return {
+    ...parsed,
+    players: parsed.players.map((player) => ({
+      ...player,
+      position: player.position ?? '',
+      area: player.area ?? '',
+    })),
+  };
+}
+
 export function loadTournamentData(): TournamentData {
   if (typeof window === 'undefined') {
     return DEFAULT_TOURNAMENT_DATA;
@@ -40,7 +52,7 @@ export function loadTournamentData(): TournamentData {
       return DEFAULT_TOURNAMENT_DATA;
     }
 
-    return parsed;
+    return normalizeTournamentData(parsed);
   } catch {
     return DEFAULT_TOURNAMENT_DATA;
   }
@@ -129,12 +141,13 @@ export function updateMatchResult(
 
 export function addPlayer(
   data: TournamentData,
-  input: { name: string; teamId: string; area: string },
+  input: { name: string; teamId: string; position: string; area: string },
 ): TournamentData {
   const player: PlayerRecord = {
     id: generateId('player'),
     name: input.name,
     teamId: input.teamId,
+    position: input.position,
     area: input.area,
   };
 
@@ -150,7 +163,7 @@ export function addPlayer(
 export function updatePlayer(
   data: TournamentData,
   playerId: string,
-  input: { name: string; teamId: string; area: string },
+  input: { name: string; teamId: string; position: string; area: string },
 ): TournamentData {
   const current = data.players.find((player) => player.id === playerId);
   if (!current) {
@@ -158,7 +171,9 @@ export function updatePlayer(
   }
 
   const players = data.players.map((player) =>
-    player.id === playerId ? { ...player, name: input.name, teamId: input.teamId, area: input.area } : player,
+    player.id === playerId
+      ? { ...player, name: input.name, teamId: input.teamId, position: input.position, area: input.area }
+      : player,
   );
 
   const teams = data.teams.map((team) => {
