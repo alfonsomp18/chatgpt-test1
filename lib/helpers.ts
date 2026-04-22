@@ -8,6 +8,9 @@ export function getTeamColorEmoji(color: string): string {
     case 'black':
     case 'negro':
       return '⚫';
+    case 'red':
+    case 'rojo':
+      return '🔴';
     case 'green':
     case 'verde':
       return '🟢';
