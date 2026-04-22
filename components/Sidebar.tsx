@@ -19,11 +19,11 @@ export function Sidebar() {
 
   return (
     <>
-      <div className="sticky top-0 z-30 border-b border-gray-200 bg-white px-4 py-3 lg:hidden">
+      <div className="sticky top-0 z-30 border-b border-gray-800 bg-gray-950 px-4 py-3 lg:hidden">
         <button
           type="button"
           onClick={() => setIsOpen((open) => !open)}
-          className="rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-700"
+          className="rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-100 transition-colors hover:bg-gray-800"
         >
           {isOpen ? 'Cerrar menú' : 'Abrir menú'}
         </button>
@@ -31,14 +31,14 @@ export function Sidebar() {
 
       <aside
         className={[
-          'border-r border-gray-200 bg-white lg:sticky lg:top-0 lg:block lg:h-screen',
+          'border-r border-gray-800 bg-gray-950 lg:sticky lg:top-0 lg:block lg:h-screen',
           isOpen ? 'block' : 'hidden lg:block',
         ].join(' ')}
       >
         <div className="flex h-full flex-col gap-6 px-4 py-6">
           <div className="space-y-1">
-            <p className="text-sm font-medium text-gray-500">⚽ Torneo Interno</p>
-            <h1 className="text-lg font-semibold text-gray-900">Torneo Interno de Futbol de TR</h1>
+            <p className="text-sm font-medium text-gray-400">⚽ Torneo Interno</p>
+            <h1 className="text-lg font-semibold text-gray-100">Torneo Interno de Futbol de TR</h1>
           </div>
 
           <nav className="flex flex-col gap-1">
@@ -52,7 +52,7 @@ export function Sidebar() {
                   onClick={() => setIsOpen(false)}
                   className={[
                     'rounded-lg px-3 py-2 text-sm transition-colors',
-                    isActive ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100',
+                    isActive ? 'bg-gray-100 text-gray-950' : 'text-gray-300 hover:bg-gray-900 hover:text-white',
                   ].join(' ')}
                 >
                   {item.label}
