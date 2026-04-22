@@ -54,6 +54,7 @@ export interface TeamWithPlayers {
   players: Array<{
     id: string;
     name: string;
+    position: string;
     area: string;
     goals: number;
   }>;
@@ -186,6 +187,7 @@ export function getTeamsWithPlayers(data: TournamentDataShape = defaultData): Te
       .map((player) => ({
         id: player.id,
         name: player.name,
+        position: player.position ?? '',
         area: player.area,
         goals: goalsByPlayer.get(player.id) ?? 0,
       }))
