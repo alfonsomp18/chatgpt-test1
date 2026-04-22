@@ -87,6 +87,7 @@ export default function AdminPage() {
 
   const [playerName, setPlayerName] = useState('');
   const [playerTeamId, setPlayerTeamId] = useState('');
+  const [playerPosition, setPlayerPosition] = useState('');
   const [playerArea, setPlayerArea] = useState('');
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
 
@@ -187,7 +188,7 @@ export default function AdminPage() {
   function handleSavePlayer(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!playerName || !playerTeamId || !playerArea) {
+    if (!playerName || !playerTeamId || !playerPosition || !playerArea) {
       return;
     }
 
@@ -195,11 +196,13 @@ export default function AdminPage() {
       ? updatePlayer(store.data, editingPlayerId, {
           name: playerName,
           teamId: playerTeamId,
+          position: playerPosition,
           area: playerArea,
         })
       : addPlayer(store.data, {
           name: playerName,
           teamId: playerTeamId,
+          position: playerPosition,
           area: playerArea,
         });
 
@@ -207,6 +210,7 @@ export default function AdminPage() {
     setEditingPlayerId(null);
     setPlayerName('');
     setPlayerTeamId('');
+    setPlayerPosition('');
     setPlayerArea('');
   }
 
@@ -220,6 +224,7 @@ export default function AdminPage() {
     setEditingPlayerId(player.id);
     setPlayerName(player.name);
     setPlayerTeamId(player.teamId);
+    setPlayerPosition(player.position ?? '');
     setPlayerArea(player.area);
   }
 
@@ -230,6 +235,7 @@ export default function AdminPage() {
       setEditingPlayerId(null);
       setPlayerName('');
       setPlayerTeamId('');
+      setPlayerPosition('');
       setPlayerArea('');
     }
   }
@@ -474,7 +480,7 @@ export default function AdminPage() {
 
       {activeTab === 'miembros' ? (
         <div className="space-y-4">
-          <form onSubmit={handleSavePlayer} className="grid gap-3 rounded-2xl border border-gray-200 bg-white p-4 sm:grid-cols-4">
+          <form onSubmit={handleSavePlayer} className="grid gap-3 rounded-2xl border border-gray-200 bg-white p-4 sm:grid-cols-5">
             <input
               value={playerName}
               onChange={(event) => setPlayerName(event.target.value)}
@@ -494,6 +500,12 @@ export default function AdminPage() {
               ))}
             </select>
             <input
+              value={playerPosition}
+              onChange={(event) => setPlayerPosition(event.target.value)}
+              placeholder="Posición"
+              className="rounded-md border border-gray-200 px-3 py-2"
+            />
+            <input
               value={playerArea}
               onChange={(event) => setPlayerArea(event.target.value)}
               placeholder="Área"
@@ -510,6 +522,7 @@ export default function AdminPage() {
                 <tr>
                   <th className="px-4 py-3">Nombre</th>
                   <th className="px-4 py-3">Equipo</th>
+                  <th className="px-4 py-3">Posición</th>
                   <th className="px-4 py-3">Área</th>
                   <th className="px-4 py-3">Acciones</th>
                 </tr>
@@ -521,6 +534,7 @@ export default function AdminPage() {
                     <td className="px-4 py-3">
                       {store.data.teams.find((team) => team.id === player.teamId)?.name ?? player.teamId}
                     </td>
+                    <td className="px-4 py-3">{player.position}</td>
                     <td className="px-4 py-3">{player.area}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
@@ -554,7 +568,7 @@ export default function AdminPage() {
               onChange={(event) => setTeamColor(event.target.value)}
               className="rounded-md border border-gray-200 px-3 py-2"
             >
-              {['azul', 'negro', 'verde', 'amarillo', 'blanco'].map((color) => (
+              {['rojo', 'azul', 'negro', 'verde', 'amarillo', 'blanco'].map((color) => (
                 <option key={color} value={color}>
                   {getTeamColorEmoji(color)} {color}
                 </option>
