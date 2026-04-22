@@ -24,25 +24,8 @@ function generateId(prefix: string) {
 
 
 function normalizeTournamentData(parsed: TournamentData): TournamentData {
-  const migratedJornadas = parsed.jornadas.map((jornada) =>
-    jornada.number === 3 ? { ...jornada, date: '2026-04-23' } : jornada,
-  );
-
-  const migratedMatches = parsed.matches.map((match) => {
-    if (match.jornada !== 3 || !match.date.startsWith('2026-04-22T')) {
-      return match;
-    }
-
-    return {
-      ...match,
-      date: match.date.replace('2026-04-22T', '2026-04-23T'),
-    };
-  });
-
   return {
     ...parsed,
-    jornadas: migratedJornadas,
-    matches: migratedMatches,
     players: parsed.players.map((player) => ({
       ...player,
       position: player.position ?? '',
