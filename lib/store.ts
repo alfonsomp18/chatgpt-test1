@@ -7,7 +7,7 @@ import { players as defaultPlayers, type PlayerRecord } from '@/data/players';
 import { teams as defaultTeams, type TeamRecord } from '@/data/teams';
 import type { TournamentDataShape } from '@/lib/stats';
 
-const STORAGE_KEY = 'tournamentData';
+const STORAGE_KEY = 'tournamentData-v2';
 
 export interface TournamentData extends TournamentDataShape {}
 

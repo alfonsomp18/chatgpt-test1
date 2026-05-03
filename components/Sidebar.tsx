@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const navigationItems = [
   { href: '/standings', label: 'Tabla Principal' },
@@ -16,6 +16,14 @@ const navigationItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const lastUpdated = useMemo(
+    () =>
+      new Intl.DateTimeFormat('es-MX', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      }).format(new Date()),
+    [],
+  );
 
   return (
     <>
@@ -60,6 +68,10 @@ export function Sidebar() {
               );
             })}
           </nav>
+
+          <div className="mt-4 border-t border-gray-800 pt-4">
+            <p className="text-xs text-gray-500">Última actualización: {lastUpdated}</p>
+          </div>
         </div>
       </aside>
     </>
