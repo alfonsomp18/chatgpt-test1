@@ -14,7 +14,7 @@ export default function TeamsPage() {
         <p className="text-sm font-medium text-gray-500">👥 Plantillas</p>
         <h1 className="text-3xl font-bold tracking-tight">Miembros por equipo</h1>
         <p className="max-w-3xl text-sm text-gray-600 sm:text-base">
-          Cada jugador mantiene la relación con su equipo, su área interna y su cuenta de goles derivada de los partidos.
+          Cada jugador muestra su posición, área interna y total de goles acumulados desde los partidos completados.
         </p>
       </header>
 
@@ -26,11 +26,16 @@ export default function TeamsPage() {
             </h2>
             <ul className="mt-3 space-y-2 text-sm text-gray-700">
               {team.players.map((player) => (
-                <li key={player.id} className="flex items-center justify-between gap-4 border-b border-gray-100 pb-2 last:border-b-0 last:pb-0">
-                  <span>
-                    {player.name} — {player.area}
-                  </span>
-                  <span className="text-gray-500">{player.goals} goles</span>
+                <li key={player.id} className="rounded-xl border border-gray-100 bg-gray-50 p-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="font-medium text-gray-900">{player.name}</p>
+                    <span className="rounded-full bg-white px-2 py-0.5 text-xs text-gray-600">⚽ {player.goals} goles</span>
+                  </div>
+                  <p className="mt-1 text-xs text-gray-600">
+                    <span className="font-medium">Posición:</span> {player.position || 'Sin posición'}
+                    <span className="mx-2">•</span>
+                    <span className="font-medium">Área:</span> {player.area || 'Sin área'}
+                  </p>
                 </li>
               ))}
             </ul>
